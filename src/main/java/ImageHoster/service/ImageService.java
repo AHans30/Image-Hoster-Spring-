@@ -46,6 +46,7 @@ public class ImageService {
         imageRepository.deleteImage(imageId);
     }
 
+    //The method calls the getImage() method in the Repository and passes the id of the image to be fetched - SAME AS getImage() method
     public Image getImageById(Integer id) {
         return imageRepository.getImageById(id);
     }
