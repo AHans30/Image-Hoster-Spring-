@@ -110,4 +110,12 @@ public class ImageRepository {
         }
     }
 
+    //This method extracts the image by ID - same as getImage() method
+    //But this method does not use TypedQuery and uses find() method of EntityManager which
+    //is instantiated using EntityManagerFactory
+    public Image getImageById(Integer id){
+        EntityManager em = emf.createEntityManager();
+        return em.find(Image.class, id);
+    }
+
 }
