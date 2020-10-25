@@ -20,32 +20,34 @@ import java.time.LocalDate;
 @Controller
 public class CommentController {
 
-    @Autowired
-    private CommentService commentService;
+  @Autowired
+  private CommentService commentService;
 
-    @Autowired
-    private ImageService imageService;
+  @Autowired
+  private ImageService imageService;
 
 
-    // This method is called when the user submits the comment form.
-    // It add the user and image fields and then sends it off the service layer for persistence.
-    @RequestMapping(value = "/image/{imageId}/{imageTitle}/comments", method = RequestMethod.POST)
-    public String createComment(@PathVariable("imageTitle") String title, @PathVariable("imageId") Integer id, @RequestParam("comment") String comment, Comment newComment, HttpSession session, Model model) throws IOException {
-        //Extract user from Http session
-        User user = (User) session.getAttribute("loggeduser");
+  // This method is called when the user submits the comment form.
+  // It add the user and image fields and then sends it off the service layer for persistence.
+  @RequestMapping(value = "/image/{imageId}/{imageTitle}/comments", method = RequestMethod.POST)
+  public String createComment(@PathVariable("imageTitle") String title,
+      @PathVariable("imageId") Integer id, @RequestParam("comment") String comment,
+      Comment newComment, HttpSession session, Model model) throws IOException {
+    //Extract user from Http session
+    User user = (User) session.getAttribute("loggeduser");
 
-        //Set state of comment
-        newComment.setUser(user);
-        newComment.setText(comment);
-        newComment.setCreatedDate(LocalDate.now());
-        newComment.setImage(imageService.getImage(id));
+    //Set state of comment
+    newComment.setUser(user);
+    newComment.setText(comment);
+    newComment.setCreatedDate(LocalDate.now());
+    newComment.setImage(imageService.getImage(id));
 
-        //Apply business logic and save comment in database through service + repository class
-        commentService.createNewComment(newComment);
+    //Apply business logic and save comment in database through service + repository class
+    commentService.createNewComment(newComment);
 
-        model.addAttribute("id", id);
-        model.addAttribute("title", title);
+    model.addAttribute("id", id);
+    model.addAttribute("title", title);
 
-        return "redirect:/images/{imageId}/{imageTitle}";
-    }
+    return "redirect:/images/{imageId}/{imageTitle}";
+  }
 }

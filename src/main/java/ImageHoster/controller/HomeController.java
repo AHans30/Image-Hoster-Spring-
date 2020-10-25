@@ -12,13 +12,13 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    @Autowired
-    private ImageService imageService;
+  @Autowired
+  private ImageService imageService;
 
-    @RequestMapping("/")
-    public String getAllImages(Model model) {
-        List<Image> images = imageService.getAllImages();
-        model.addAttribute("images", images);
-        return "index";
-    }
+  @RequestMapping("/")
+  public String getAllImages(Model model) {
+    List<Image> images = imageService.getAllImages();
+    model.addAttribute("images", images);
+    return "index";
+  }
 }

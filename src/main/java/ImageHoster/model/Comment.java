@@ -6,62 +6,63 @@ import javax.persistence.*;
 @Entity
 @Table(name = "comments")
 public class Comment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id")
-    private Integer id;
 
-    @Column(name="text")
-    private String text;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
+  private Integer id;
 
-    @Column(name="creation_date")
-    private LocalDate createdDate;
+  @Column(name = "text")
+  private String text;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+  @Column(name = "creation_date")
+  private LocalDate createdDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="image_id")
-    private Image image;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "user_id")
+  private User user;
 
-    public Integer getId() {
-        return id;
-    }
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "image_id")
+  private Image image;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public String getText() {
-        return text;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public String getText() {
+    return text;
+  }
 
-    public LocalDate getCreatedDate() {
-        return createdDate;
-    }
+  public void setText(String text) {
+    this.text = text;
+  }
 
-    public void setCreatedDate(LocalDate createdDate) {
-        this.createdDate = createdDate;
-    }
+  public LocalDate getCreatedDate() {
+    return createdDate;
+  }
 
-    public User getUser() {
-        return user;
-    }
+  public void setCreatedDate(LocalDate createdDate) {
+    this.createdDate = createdDate;
+  }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public Image getImage() {
-        return image;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
+  public Image getImage() {
+    return image;
+  }
+
+  public void setImage(Image image) {
+    this.image = image;
+  }
 }
