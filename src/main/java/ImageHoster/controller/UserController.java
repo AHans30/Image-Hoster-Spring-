@@ -5,6 +5,8 @@ import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.UserService;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,9 +42,20 @@ public class UserController {
     //This controller method is called when the request pattern is of type 'users/registration' and also the incoming request is of POST type
     //This method calls the business logic and after the user record is persisted in the database, directs to login page
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
-    public String registerUser(User user) {
-        userService.registerUser(user);
-        return "redirect:/users/login";
+    public String registerUser(User user, Model model) {
+
+        //Check and validate if the password is strong or not (contains atleast 1 alphabet, number and special character
+        //If the password is strong, register the user
+        if(isPasswordStrong(user.getPassword())) {
+            userService.registerUser(user);
+            model.addAttribute("passwordTypeError", false);
+            return "redirect:/users/login";
+        }
+        //
+        else {
+            model.addAttribute("passwordTypeError", true);
+            return registration(model);
+        }
     }
 
     //This controller method is called when the request pattern is of type 'users/login'
@@ -78,5 +91,17 @@ public class UserController {
         List<Image> images = imageService.getAllImages();
         model.addAttribute("images", images);
         return "index";
+    }
+
+    //To validate if the user entered password is strong or not
+    //Returns true if entered password contains atleast 1 alphabet, 1 number, and 1 special character
+    //Returns false otherwise
+    private Boolean isPasswordStrong(String userPassword) {
+        //We use java.util's pattern and matcher to apply RegEx and detect if the password
+        // string contains at least 1 alphabet, 1 number and 1 special character.
+        Pattern p = Pattern.compile("(?=.*[a-z])(?=.*[0-9])(?=.*[^a-z0-9])", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(userPassword);
+
+        return m.find();
     }
 }
