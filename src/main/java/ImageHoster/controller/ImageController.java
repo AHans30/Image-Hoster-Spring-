@@ -97,7 +97,7 @@ public class ImageController {
         Image image = imageService.getImage(imageId);
         User loggedUser = (User) session.getAttribute("loggeduser");
 
-        boolean isLoggedUserImageOwner = imageService.isLoggedUserImageOwner(loggedUser, image);
+        boolean isLoggedUserImageOwner = isLoggedUserImageOwner(loggedUser, image);
 
         //Check if the logged in user (extracted from Http session) is same as the owner of the image by user's id
         //If the logged user is not owner of the image - display error message on
@@ -163,7 +163,7 @@ public class ImageController {
         //Check if the logged in user (extracted from Http session) is same as the owner of the image
         //If the logged user is not owner of the image - display error message on
         // images/image.html page (using showImage() method from the ImageController)
-        boolean isLoggedUserImageOwner = imageService.isLoggedUserImageOwner(loggedUser, image);
+        boolean isLoggedUserImageOwner = isLoggedUserImageOwner(loggedUser, image);
 
         //If the logged user is not owner of image - add deleteError = True in model and display error
         // Error flag is added as an attribute in  Model
@@ -220,5 +220,14 @@ public class ImageController {
         tagString.append(lastTag.getName());
 
         return tagString.toString();
+    }
+
+    //Authenticates if the logged user trying to edit/delete image is owner of image or not
+    //Returns true if logged user is owner of image to be edited/deleted
+    //Returns false otherwise
+    private Boolean isLoggedUserImageOwner(User loggedUser, Image image) {
+
+        return loggedUser.getId() == image.getUser().getId();
+
     }
 }

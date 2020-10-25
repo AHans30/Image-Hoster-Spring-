@@ -86,7 +86,7 @@ public class ImageControllerTest {
         image.setDescription("This image is for testing purpose");
         image.setUser(user);
 
-        Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
+        Mockito.when(imageService.getImageById(Mockito.anyInt())).thenReturn(image);
 
         this.mockMvc.perform(get("/images/1/new").session(session))
                 .andExpect(view().name("images/image"))

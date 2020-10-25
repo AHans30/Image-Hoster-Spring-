@@ -52,10 +52,4 @@ public class ImageService {
         return imageRepository.getImageById(id);
     }
 
-    //Authenticates if the logged user trying to edit/delete image is owner of image or not
-    //Returns true if logged user is owner of image to be edited/deleted
-    //Returns false otherwise
-    public boolean isLoggedUserImageOwner(User loggedUser, Image image) {
-        return loggedUser.getId().equals(image.getUser().getId());
-    }
 }
