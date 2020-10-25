@@ -92,13 +92,28 @@ public class ImageController {
     //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
-    public String editImage(@RequestParam("imageId") Integer imageId, Model model) {
+    public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
         Image image = imageService.getImage(imageId);
+        User loggedUser = (User) session.getAttribute("loggeduser");
 
-        String tags = convertTagsToString(image.getTags());
-        model.addAttribute("image", image);
-        model.addAttribute("tags", tags);
-        return "images/edit";
+        boolean isLoggedUserImageOwner = imageService.isLoggedUserImageOwner(loggedUser, image);
+
+        //Check if the logged in user (extracted from Http session) is same as the owner of the image by user's id
+        //If the logged user is not owner of the image - display error message on
+        // images/image.html page (using showImage() method from the ImageController)
+        //Error flag is added as an attribute in  Model
+        if(!isLoggedUserImageOwner){
+            model.addAttribute("editError", true);
+            return showImage(image.getTitle(), image.getId(), model);
+        }
+        //If the logged user is  owner of the image - take user to edit.html i.e. user is allowed to edit the image
+        else{
+            model.addAttribute("editError", false);
+            String tags = convertTagsToString(image.getTags());
+            model.addAttribute("image", image);
+            model.addAttribute("tags", tags);
+            return "images/edit";
+        }
     }
 
     //This controller method is called when the request pattern is of type 'images/edit' and also the incoming request is of PUT type
@@ -132,7 +147,7 @@ public class ImageController {
         updatedImage.setDate(new Date());
 
         imageService.updateImage(updatedImage);
-        return "redirect:/images/" + updatedImage.getTitle();
+        return "redirect:/images/" + updatedImage.getId() + "/" + updatedImage.getTitle();
     }
 
 
@@ -140,9 +155,27 @@ public class ImageController {
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
     //Looks for a controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
-    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId) {
-        imageService.deleteImage(imageId);
-        return "redirect:/images";
+    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, Model model,HttpSession session) {
+        User loggedUser = (User) session.getAttribute("loggeduser");
+        Image image = imageService.getImage(imageId);
+
+        //Check if the logged in user (extracted from Http session) is same as the owner of the image
+        //If the logged user is not owner of the image - display error message on
+        // images/image.html page (using showImage() method from the ImageController)
+        boolean isLoggedUserImageOwner = imageService.isLoggedUserImageOwner(loggedUser, image);
+
+        //If the logged user is not owner of image - add deleteError = True in model and display error
+        // Error flag is added as an attribute in  Model
+        if(!isLoggedUserImageOwner){
+            model.addAttribute("deleteError", true);
+            return showImage(image.getTitle(), image.getId(), model);
+        }
+        //If the logged user is  owner of the image - delete the image and redirect to images.html
+        else{
+            model.addAttribute("deleteError", false);
+            imageService.deleteImage(imageId);
+            return "redirect:/images";
+        }
     }
 
 
