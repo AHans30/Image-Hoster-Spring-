@@ -1,6 +1,7 @@
 package ImageHoster.controller;
 
 import ImageHoster.model.Comment;
+import ImageHoster.model.Image;
 import ImageHoster.model.User;
 import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
@@ -44,7 +45,7 @@ public class CommentController {
         model.addAttribute("id", id);
         model.addAttribute("title", title);
 
-
-        return imageController.showImage(title, id, model);
+        return "redirect:/images/{imageId}/{imageTitle}";
+        //return imageController.showImage(title, id, model);
     }
 }

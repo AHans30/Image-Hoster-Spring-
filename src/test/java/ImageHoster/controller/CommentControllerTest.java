@@ -33,6 +33,9 @@ public class CommentControllerTest {
     @MockBean
     private ImageService imageService;
 
+    @MockBean
+    private ImageController imageController;
+
     //This test checks controller logic for comment and checks whether the controller logic redirects to the request handling method with request mapping of type "/images/{imageId}/{title}"
     @Test
     public void createComment() throws Exception {

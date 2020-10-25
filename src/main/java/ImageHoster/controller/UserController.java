@@ -49,11 +49,12 @@ public class UserController {
         if(isPasswordStrong(user.getPassword())) {
             userService.registerUser(user);
             model.addAttribute("passwordTypeError", false);
-            return "redirect:/users/login";
+            return "users/login";
         }
         //
         else {
-            model.addAttribute("passwordTypeError", true);
+            String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
+            model.addAttribute("passwordTypeError", error);
             return registration(model);
         }
     }
