@@ -20,9 +20,11 @@ import java.time.LocalDate;
 @Controller
 public class CommentController {
 
+  //CommentService being @Autowired, spring framework will instantiate and inject the object dependency implicitly for us
   @Autowired
   private CommentService commentService;
 
+  //ImageService being @Autowired, spring framework will instantiate and inject the object dependency implicitly for us
   @Autowired
   private ImageService imageService;
 
@@ -42,7 +44,7 @@ public class CommentController {
     newComment.setCreatedDate(LocalDate.now());
     newComment.setImage(imageService.getImage(id));
 
-    //Apply business logic and save comment in database through service + repository class
+    //Apply business logic and save comment in database through service + repository (used in service class) class
     commentService.createNewComment(newComment);
 
     model.addAttribute("id", id);
